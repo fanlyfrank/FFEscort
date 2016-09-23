@@ -7,7 +7,12 @@
 //
 
 #import "AppDelegate.h"
+#import "FFGlobalMacro.h"
 
+#import <UMSocial.h>
+#import <UMengSocialCOM/UMSocialWechatHandler.h>
+#import <UMengSocialCOM/UMSocialQQHandler.h>
+#import <UMengSocialCOM/UMSocialSinaSSOHandler.h>
 @interface AppDelegate ()
 
 @end
@@ -16,8 +21,44 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    [self umengParamsSetting];
+    
+    [self appearanceSetting];
+    
     return YES;
+}
+
+- (void)umengParamsSetting {
+    
+    [UMSocialData setAppKey:@"57e39b6467e58ead0d0024e8"];
+    
+    //设置微信AppId、appSecret，分享url
+    [UMSocialWechatHandler setWXAppId:@"wxd930ea5d5a258f4f"
+                            appSecret:@"db426a9829e4b49a0dcac7b4162da6b6"
+                                  url:@"http://www.umeng.com/social"];
+    
+    //打开新浪微博的SSO开关，设置新浪微博回调地址，这里必须要和你在新浪微博后台设置的回调地址一致。
+    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"3921700954"
+                                              secret:@"04b48b094faeb16683c32669824ebdad"
+                                         RedirectURL:@"http://sns.whalecloud.com/sina2/callback"];
+}
+
+- (void)appearanceSetting {
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSFontAttributeName:FFBigFont}];
+    [[UITabBarItem appearance]
+     setTitleTextAttributes:@{NSForegroundColorAttributeName:FFNormalColor,NSFontAttributeName:FFBigFont}
+     forState:UIControlStateSelected];
+    
+    UIEdgeInsets insets = UIEdgeInsetsMake(0, 0, -1.5, 0);
+    UIImage *alignedImage = [[UIImage imageNamed:@"left"] imageWithAlignmentRectInsets:insets];
+    [[UINavigationBar appearance] setBackIndicatorImage:alignedImage];
+    [[UINavigationBar appearance] setBackIndicatorTransitionMaskImage:alignedImage];
+    [[UIBarButtonItem appearance]
+     setTitleTextAttributes:@{NSFontAttributeName:FFNormalFont}
+     forState:UIControlStateNormal];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -40,6 +81,15 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    BOOL result = [UMSocialSnsService handleOpenURL:url];
+    if (result == FALSE) {
+        //调用其他SDK，例如支付宝SDK等
+    }
+    return result;
 }
 
 @end
