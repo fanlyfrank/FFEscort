@@ -47,8 +47,6 @@
         [[UMSocialAccountManager socialAccountDictionary] valueForKey:UMShareToWechatSession];
         NSLog(@"\n username = %@,\n usid = %@,\n token = %@,\n iconUrl = %@,\n unionId = %@,\n expriedData = %@",snsAccount.userName, snsAccount.usid, snsAccount.accessToken, snsAccount.iconURL, snsAccount.unionId, snsAccount.refreshDate);
         
-        snsAccount.iconURL = @"dddddddddddelete";
-        [UMSocialAccountManager setSnsAccount:snsAccount];
         return YES;
     }
 }
