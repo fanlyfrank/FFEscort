@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		030BFD831E34AEA3D7142D2D /* libPods-FFEscort.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C4CC53DCB12E06CA5FA1DF /* libPods-FFEscort.a */; };
+		350A1CCE1DB6002D00974EB1 /* FFUserClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 350A1CCD1DB6002D00974EB1 /* FFUserClient.m */; };
 		352489031D7D59CE00A797EA /* HttpClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 352489021D7D59CE00A797EA /* HttpClient.m */; };
 		352489091D7D5CB300A797EA /* UIImage+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 352489061D7D5CB300A797EA /* UIImage+Utils.m */; };
 		3524890A1D7D5CB300A797EA /* MBProgressHUD+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 352489081D7D5CB300A797EA /* MBProgressHUD+Addition.m */; };
@@ -58,6 +59,8 @@
 
 /* Begin PBXFileReference section */
 		1012175681D247BB3C26D5FA /* Pods-FFEscort.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FFEscort.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FFEscort/Pods-FFEscort.debug.xcconfig"; sourceTree = "<group>"; };
+		350A1CCC1DB6002D00974EB1 /* FFUserClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFUserClient.h; sourceTree = "<group>"; };
+		350A1CCD1DB6002D00974EB1 /* FFUserClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFUserClient.m; sourceTree = "<group>"; };
 		352489011D7D59CE00A797EA /* HttpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpClient.h; sourceTree = "<group>"; };
 		352489021D7D59CE00A797EA /* HttpClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpClient.m; sourceTree = "<group>"; };
 		352489041D7D59E900A797EA /* FFGlobalMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFGlobalMacro.h; sourceTree = "<group>"; };
@@ -285,6 +288,8 @@
 		358314241D7D5726006E14F2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				350A1CCC1DB6002D00974EB1 /* FFUserClient.h */,
+				350A1CCD1DB6002D00974EB1 /* FFUserClient.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -525,6 +530,7 @@
 				352489131D7D65AD00A797EA /* FFDiscoverVC.m in Sources */,
 				3524891F1D82935700A797EA /* FFCollectionVC.m in Sources */,
 				3524892B1D87AC4500A797EA /* FFMineVC.m in Sources */,
+				350A1CCE1DB6002D00974EB1 /* FFUserClient.m in Sources */,
 				3565A6971D8FE9D300E4D693 /* FFCardImgInfoCell.m in Sources */,
 				35982CA31D92365300A7F1CF /* FFAvatarPreviewVC.m in Sources */,
 				352489091D7D5CB300A797EA /* UIImage+Utils.m in Sources */,

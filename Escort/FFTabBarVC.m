@@ -13,6 +13,7 @@
 #import "FFGlobalMacro.h"
 
 #import "FFLoginVC.h"
+#import "FFUserClient.h"
 
 @interface FFTabBarVC () <UITabBarControllerDelegate>
 
@@ -28,8 +29,11 @@
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
     
     NSUInteger indexOfTab = [tabBarController.viewControllers indexOfObject:viewController];
-    
-    if (indexOfTab != 0 && ![UMSocialAccountManager isOauthAndTokenNotExpired:UMShareToWechatSession]) {
+
+    if (indexOfTab != 0 && (
+        ![FFUserClient isLocalLoginSuccess] ||
+        ![UMSocialAccountManager isOauthAndTokenNotExpired:UMShareToWechatSession])) {
+        
         FFLoginVC *loginVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]
                               instantiateViewControllerWithIdentifier:NSStringFromClass([FFLoginVC class])];
         
@@ -41,14 +45,7 @@
         return NO;
     }
 
-    else {
-        
-        UMSocialAccountEntity *snsAccount =
-        [[UMSocialAccountManager socialAccountDictionary] valueForKey:UMShareToWechatSession];
-        NSLog(@"\n username = %@,\n usid = %@,\n token = %@,\n iconUrl = %@,\n unionId = %@,\n expriedData = %@",snsAccount.userName, snsAccount.usid, snsAccount.accessToken, snsAccount.iconURL, snsAccount.unionId, snsAccount.refreshDate);
-        
-        return YES;
-    }
+    return YES;
 }
 
 @end

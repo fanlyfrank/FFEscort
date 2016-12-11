@@ -10,7 +10,7 @@
 #import "MBProgressHUD+Addition.h"
 #import "AppDelegate.h"
 
-static NSString *const kSuccessStatusCode = @"1";
+static NSString *const kSuccessStatusCode = @"1001";
 
 @interface HttpClient()
 
@@ -35,11 +35,10 @@ static HttpClient *_sharedClient;
         NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
         sessionConfiguration.timeoutIntervalForRequest = 40.0;
         
-        _sharedClient = [[HttpClient alloc] initWithBaseURL:[NSURL URLWithString:/*@"http://192.168.5.24:8080"*/@"http://fanlyfrank-lawyertool.daoapp.io/LawyerTool/"]
+        _sharedClient = [[HttpClient alloc] initWithBaseURL:[NSURL URLWithString:@"http://192.168.0.106:8081"]
                                        sessionConfiguration:sessionConfiguration];
         // 接收时的contenttype
-        _sharedClient.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain",
-                                                                   @"application/json", nil];
+        _sharedClient.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html", @"application/json", nil];
         _sharedClient.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringCacheData;
         _sharedClient.requestSerializerHTTPType = [[AFHTTPRequestSerializer alloc] init];
         _sharedClient.requestSerializerJSONType = [[AFJSONRequestSerializer alloc] init];
@@ -114,17 +113,17 @@ static HttpClient *_sharedClient;
     
     success:^(NSURLSessionDataTask *task, id responseObject) {
    
-        NSString *result = responseObject[@"result"];
+        NSString *result = responseObject[@"status"][@"code"];
         
         if ([kSuccessStatusCode isEqual:result]) {
             
             if (success) {
-                success(task, responseObject);
+                success(task, responseObject[@"result"]);
             }
             
         } else {
             if (failure) {
-                NSString *message = responseObject[@"errordesc"];
+                NSString *message = responseObject[@"status"][@"msg"];
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey:@"Network request error",
                                            NSLocalizedFailureReasonErrorKey:message};
                 NSError *error = [NSError errorWithDomain:@"domain error" code:[responseObject[@"errorcode"] intValue] userInfo:userInfo];
@@ -155,7 +154,7 @@ static HttpClient *_sharedClient;
     NSParameterAssert(api);
     NSLog(@"api: ---%@",api);
     NSLog(@"params: ---%@",params);
-    self.requestSerializer = self.requestSerializerJSONType;
+    //self.requestSerializer = self.requestSerializerJSONType;
     NSURLSessionDataTask *task;
     
     task = [self POST:api parameters:params
@@ -170,19 +169,19 @@ static HttpClient *_sharedClient;
             
         success:^(NSURLSessionDataTask *task, id responseObject) {
      
-        NSString *result = responseObject[@"result"];
+        NSString *result = responseObject[@"status"][@"code"];
         
         if ([kSuccessStatusCode isEqual:result]) {
             
             if (success) {
-                success(task, responseObject);
+                success(task, responseObject[@"result"]);
                 NSLog(@"responseObject : ---%@",responseObject);
             }
             
         } else {
             
             if (failure) {
-                NSString *message = responseObject[@"errordesc"];
+                NSString *message = responseObject[@"status"][@"msg"];
                 if (!message) {message = @"";}
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey:@"Network request error",
                                            NSLocalizedFailureReasonErrorKey:message};

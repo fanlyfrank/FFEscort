@@ -12,8 +12,13 @@
 #import <UMengSocialCOM/UMSocialAccountManager.h>
 
 #import "FFLoginVC.h"
+#import "FFUserClient.h"
+
+#import "MBProgressHUD+Addition.h"
 
 @interface FFLoginVC () <UMSocialUIDelegate>
+
+@property (strong, nonatomic) FFUserClient *userClient;
 
 @end
 
@@ -23,6 +28,13 @@
     [super viewDidLoad];
 }
 
+- (FFUserClient *) userClient {
+    if (!_userClient) {
+        _userClient = [[FFUserClient alloc] init];
+    }
+    
+    return _userClient;
+}
 
 - (IBAction)cancleClick:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -37,36 +49,26 @@
         
         if (response.responseCode == UMSResponseCodeSuccess) {
             
-            NSDictionary *dict = [UMSocialAccountManager socialAccountDictionary];
-            NSLog(@"user dic %@", dict);
-            
             UMSocialAccountEntity *snsAccount =
             [[UMSocialAccountManager socialAccountDictionary] valueForKey:snsPlatform.platformName];
             
             
             [UMSocialAccountManager postSnsAccount:snsAccount completion:^(UMSocialResponseEntity *response) {
                 
-                NSLog(@"\nusername = %@,\n usid = %@,\n token = %@ iconUrl = %@,\n unionId = %@,\n thirdPlatformUserProfile = %@,\n thirdPlatformResponse = %@ \n, message = %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL, snsAccount.unionId, response.thirdPlatformUserProfile, response.thirdPlatformResponse, response.message);
+                [self.userClient registerOrLoginWithSnsUser:snsAccount success:^{
+                    
+                    self.tabBarVC.selectedViewController = self.successTargetVC;
+                    
+                    [self dismissViewControllerAnimated:YES completion:nil];
+                    
+                } failure:^{
+                    
+                    [MBProgressHUD showToastWithTitle:@"登录发生错误，请重试！" success:NO superContainer:self.view];
+                }];
                 
-                snsAccount.iconURL = @"dddddddddddelete";
-                
-                [UMSocialAccountManager setSnsAccount:snsAccount];
-               
-                self.tabBarVC.selectedViewController = self.successTargetVC;
-                
-                [self dismissViewControllerAnimated:YES completion:nil];
             }];
         }
     });
-    
-    /*
-    [UMSocialSnsService presentSnsIconSheetView:self
-                                         appKey:[UMSocialData appKey]
-                                      shareText:@"fanly test message!!!"
-                                     shareImage:[UIImage imageNamed:@"right"]
-                                shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToSina]
-                                       delegate:self];
-     */
     
 }
 
